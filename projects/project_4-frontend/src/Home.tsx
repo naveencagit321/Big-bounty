@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import ConnectWallet from './components/ConnectWallet'
 import Transact from './components/Transact'
 import AppCalls from './components/AppCalls'
+import BountyBoardApp from './components/BountyBoardApp'
 
 interface HomeProps {}
 
@@ -11,6 +12,7 @@ const Home: React.FC<HomeProps> = () => {
   const [openWalletModal, setOpenWalletModal] = useState<boolean>(false)
   const [openDemoModal, setOpenDemoModal] = useState<boolean>(false)
   const [appCallsDemoModal, setAppCallsDemoModal] = useState<boolean>(false)
+  const [showBountyBoard, setShowBountyBoard] = useState<boolean>(false)
   const { activeAddress } = useWallet()
 
   const toggleWalletModal = () => {
@@ -23,6 +25,11 @@ const Home: React.FC<HomeProps> = () => {
 
   const toggleAppCallsModal = () => {
     setAppCallsDemoModal(!appCallsDemoModal)
+  }
+
+  // If Bounty Board is shown, display it
+  if (showBountyBoard) {
+    return <BountyBoardApp walletAddress={activeAddress || undefined} isConnected={!!activeAddress} />
   }
 
   return (
@@ -62,6 +69,12 @@ const Home: React.FC<HomeProps> = () => {
                 Contract Interactions Demo
               </button>
             )}
+
+            <div className="divider" />
+
+            <button data-test-id="bounty-board" className="btn btn-success m-2" onClick={() => setShowBountyBoard(true)}>
+              ⚡ Bounty Board (NEW)
+            </button>
           </div>
 
           <ConnectWallet openModal={openWalletModal} closeModal={toggleWalletModal} />
