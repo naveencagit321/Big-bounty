@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '.vscode/**'
+      - '.idea/**'
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  project_4-contracts-validate:
+    name: Run project_4-contracts release
+    secrets: inherit
+    uses: ./.github/workflows/project_4-contracts-ci.yaml
+
+  project_4-contracts-release:
+    name: Run project_4-contracts release
+    secrets: inherit
+    uses: ./.github/workflows/project_4-contracts-cd.yaml
+    needs: project_4-contracts-validate
+
+  project_4-frontend-validate:
+    name: Run project_4-frontend release
+    secrets: inherit
+    uses: ./.github/workflows/project_4-frontend-ci.yaml
+
+  project_4-frontend-release:
+    name: Run project_4-frontend release
+    secrets: inherit
+    uses: ./.github/workflows/project_4-frontend-cd.yaml
+    needs: project_4-frontend-validate
